@@ -1,0 +1,140 @@
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: Cluster
+metadata:
+  name: eksa-01
+  namespace: default
+spec:
+  bundlesRef:
+    apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+    name: bundles-11
+    namespace: eksa-system
+  clusterNetwork:
+    cniConfig:
+      cilium: {}
+    pods:
+      cidrBlocks:
+      - 192.168.0.0/16
+    services:
+      cidrBlocks:
+      - 10.96.0.0/12
+  controlPlaneConfiguration:
+    count: 3
+    endpoint:
+      host: 10.4.32.25
+    machineGroupRef:
+      kind: VSphereMachineConfig
+      name: eksa-01-cp
+  datacenterRef:
+    kind: VSphereDatacenterConfig
+    name: eksa-01
+  externalEtcdConfiguration:
+    count: 3
+    machineGroupRef:
+      kind: VSphereMachineConfig
+      name: eksa-01-etcd
+  gitOpsRef:
+    kind: FluxConfig
+    name: my-github-flux-provider
+  kubernetesVersion: "1.21"
+  managementCluster:
+    name: eksa-01
+  workerNodeGroupConfigurations:
+  - count: 3
+    machineGroupRef:
+      kind: VSphereMachineConfig
+      name: eksa-01-ng
+    name: md-0
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereDatacenterConfig
+metadata:
+  name: eksa-01
+  namespace: default
+spec:
+  datacenter: SDDC-Datacenter
+  insecure: false
+  network: /SDDC-Datacenter/network/eks-workload-network
+  server: vcenter.sddc-18-211-251-188.vmwarevmc.com
+  thumbprint: AA:17:79:A0:E0:E3:49:11:3F:30:EF:89:39:1B:B7:B6:94:CC:0F:6A
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  annotations:
+    anywhere.eks.amazonaws.com/control-plane: "true"
+  name: eksa-01-cp
+  namespace: default
+spec:
+  datastore: /SDDC-Datacenter/datastore/WorkloadDatastore
+  diskGiB: 25
+  folder: /SDDC-Datacenter/vm/SDDC-Datacenter/vm/vibhutig
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: ubuntu
+  resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
+  template: /SDDC-Datacenter/vm/Templates/ubuntu-v1.21.13-kubernetes-1-21-eks-15-amd64-8cecfcd
+  users:
+  - name: capv
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTRpDrkElvEi68+uSqXydGg4NlXPGhlsXcJaEKP9Tw4lJsDzl0fqwjpig6filf8cqNQzHl9x+4hTaVa7kmJXTcyI+1DKwiP4EKjq0ysatBvDAAMOjn5A2iC5nn9xmwOzsWu+NI9FgDTlyAwA1ejHzWnhSHv+9Wkf9VjfeNuMfljJmYCiFTWqNX9Z0fYAsE05BjKVk0L0kcFVjq4dyNCd4LcKVE76uoqTiI4fyo1sCvevnc2ecDIG4H2eCLNLwaVcl79JfPIrH7Tpuio9KyINxtDXNFJYjAmIw3tr+q0fu4RteyPXUvJ0D5LUqHRizt+ebni2V4k8N7mWdm9U775Bmk/rL4h/HD5ASyu+WIn0UfHxaKdD17mrQ6grI8vOlOeOBdosMEKj6qDiH9pSwsodfGMHvatjMs11ihPG7raLwdkwkGHC+MOA+bQpeu0li5mRY0t5SwlgqEg+c8tBD7GrfCDrJVNXm5WJyXNV+zEQiDNp9r3UXrLTkBXDnt81tYb3dcYAnUxNd2xj6r+52oXNwzLioZET/NYh1n7ofLA6kjZ6/LL2CZmlPeDFbu5MYPm3MwkjDcC0KCELqG99ALDcLez7pa/R9aykjgrai/v9JGU/tjDjbyhG91Vf9UmHbZ7ySU9ld1okTscNkMnGtSQCIPKG1I9jTWfYw4YbRBJDO8IQ==
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  annotations:
+    anywhere.eks.amazonaws.com/etcd: "true"
+  name: eksa-01-etcd
+  namespace: default
+spec:
+  datastore: /SDDC-Datacenter/datastore/WorkloadDatastore
+  diskGiB: 25
+  folder: /SDDC-Datacenter/vm/SDDC-Datacenter/vm/vibhutig
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: ubuntu
+  resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
+  template: /SDDC-Datacenter/vm/Templates/ubuntu-v1.21.13-kubernetes-1-21-eks-15-amd64-8cecfcd
+  users:
+  - name: capv
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTRpDrkElvEi68+uSqXydGg4NlXPGhlsXcJaEKP9Tw4lJsDzl0fqwjpig6filf8cqNQzHl9x+4hTaVa7kmJXTcyI+1DKwiP4EKjq0ysatBvDAAMOjn5A2iC5nn9xmwOzsWu+NI9FgDTlyAwA1ejHzWnhSHv+9Wkf9VjfeNuMfljJmYCiFTWqNX9Z0fYAsE05BjKVk0L0kcFVjq4dyNCd4LcKVE76uoqTiI4fyo1sCvevnc2ecDIG4H2eCLNLwaVcl79JfPIrH7Tpuio9KyINxtDXNFJYjAmIw3tr+q0fu4RteyPXUvJ0D5LUqHRizt+ebni2V4k8N7mWdm9U775Bmk/rL4h/HD5ASyu+WIn0UfHxaKdD17mrQ6grI8vOlOeOBdosMEKj6qDiH9pSwsodfGMHvatjMs11ihPG7raLwdkwkGHC+MOA+bQpeu0li5mRY0t5SwlgqEg+c8tBD7GrfCDrJVNXm5WJyXNV+zEQiDNp9r3UXrLTkBXDnt81tYb3dcYAnUxNd2xj6r+52oXNwzLioZET/NYh1n7ofLA6kjZ6/LL2CZmlPeDFbu5MYPm3MwkjDcC0KCELqG99ALDcLez7pa/R9aykjgrai/v9JGU/tjDjbyhG91Vf9UmHbZ7ySU9ld1okTscNkMnGtSQCIPKG1I9jTWfYw4YbRBJDO8IQ==
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  name: eksa-01-ng
+  namespace: default
+spec:
+  datastore: /SDDC-Datacenter/datastore/WorkloadDatastore
+  diskGiB: 25
+  folder: /SDDC-Datacenter/vm/SDDC-Datacenter/vm/vibhutig
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: ubuntu
+  resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
+  template: /SDDC-Datacenter/vm/Templates/ubuntu-v1.21.13-kubernetes-1-21-eks-15-amd64-8cecfcd
+  users:
+  - name: capv
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTRpDrkElvEi68+uSqXydGg4NlXPGhlsXcJaEKP9Tw4lJsDzl0fqwjpig6filf8cqNQzHl9x+4hTaVa7kmJXTcyI+1DKwiP4EKjq0ysatBvDAAMOjn5A2iC5nn9xmwOzsWu+NI9FgDTlyAwA1ejHzWnhSHv+9Wkf9VjfeNuMfljJmYCiFTWqNX9Z0fYAsE05BjKVk0L0kcFVjq4dyNCd4LcKVE76uoqTiI4fyo1sCvevnc2ecDIG4H2eCLNLwaVcl79JfPIrH7Tpuio9KyINxtDXNFJYjAmIw3tr+q0fu4RteyPXUvJ0D5LUqHRizt+ebni2V4k8N7mWdm9U775Bmk/rL4h/HD5ASyu+WIn0UfHxaKdD17mrQ6grI8vOlOeOBdosMEKj6qDiH9pSwsodfGMHvatjMs11ihPG7raLwdkwkGHC+MOA+bQpeu0li5mRY0t5SwlgqEg+c8tBD7GrfCDrJVNXm5WJyXNV+zEQiDNp9r3UXrLTkBXDnt81tYb3dcYAnUxNd2xj6r+52oXNwzLioZET/NYh1n7ofLA6kjZ6/LL2CZmlPeDFbu5MYPm3MwkjDcC0KCELqG99ALDcLez7pa/R9aykjgrai/v9JGU/tjDjbyhG91Vf9UmHbZ7ySU9ld1okTscNkMnGtSQCIPKG1I9jTWfYw4YbRBJDO8IQ==
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: FluxConfig
+metadata:
+  name: my-github-flux-provider
+  namespace: default
+spec:
+  branch: main
+  clusterConfigPath: clusters/eksa-01
+  github:
+    owner: 22vibhutigoel
+    personal: true
+    repository: eksa
+  systemNamespace: flux-system
+
+---

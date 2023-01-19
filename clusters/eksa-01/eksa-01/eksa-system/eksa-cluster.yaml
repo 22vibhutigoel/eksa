@@ -39,7 +39,7 @@ spec:
   managementCluster:
     name: eksa-01
   workerNodeGroupConfigurations:
-  - count: 4
+  - count: 5
     machineGroupRef:
       kind: VSphereMachineConfig
       name: eksa-01-ng

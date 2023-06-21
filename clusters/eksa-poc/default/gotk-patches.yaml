@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: source-controller
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: public.ecr.aws/eks-anywhere/fluxcd/source-controller:v1.0.0-rc.3-eks-a-40
+        name: manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kustomize-controller
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: public.ecr.aws/eks-anywhere/fluxcd/kustomize-controller:v1.0.0-rc.3-eks-a-40
+        name: manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helm-controller
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: public.ecr.aws/eks-anywhere/fluxcd/helm-controller:v0.33.0-eks-a-40
+        name: manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-controller
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: public.ecr.aws/eks-anywhere/fluxcd/notification-controller:v1.0.0-rc.3-eks-a-40
+        name: manager

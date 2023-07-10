@@ -70,30 +70,6 @@ apiVersion: anywhere.eks.amazonaws.com/v1alpha1
 kind: VSphereMachineConfig
 metadata:
   annotations:
-    anywhere.eks.amazonaws.com/etcd: "true"
-  name: workload-etcd
-  namespace: default
-spec:
-  cloneMode: fullClone
-  datastore: /SDDC-Datacenter/datastore/WorkloadDatastore
-  diskGiB: 25
-  folder: /SDDC-Datacenter/vm/SDDC-Datacenter/vm/EKSAPOC-IND-TML
-  memoryMiB: 8192
-  numCPUs: 2
-  osFamily: bottlerocket
-  resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
-  template: /SDDC-Datacenter/vm/Templates/bottlerocket-v1.26.4-kubernetes-1-26-eks-10-amd64-a195374
-  users:
-  - name: ec2-user
-    sshAuthorizedKeys:
-    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0DtKDP/zEo0PS9lURD8K/EXrblDji4lb/Dh6J6GEsLHs3eNTMp1NTA9+dPZIdUHv+UpFK9m3WdjWROgX81KDGsKktLwI1l9Q+01NsGFYSypsLE1T4YZWXMvWBqOIkRmG0dYCyr2DCQ7dexmJ0f7rXZt1EH9UgFelbevVxABXkixt1VAEN3IQGiPx8eXBFzjQRXQG5XoILUlLPNxmCzc1E5pNyAep50Onq5BNwqf0X1i9WPqeLy1ipOKUsO6SO35MAkaN1PoghCNy4JGtqbp1e1wMkUifEwmAP9RIrStJdGj2YaHElQNwhiLDxjpmEh2COkQ1RnERiWpwfJXu0sW038/7lxL6RNQVXf9ZJxF02pbJKGpaL2gvPDQeLkdGMkArDR2Zuc1TIHVx/PrkCpehIm5nawMIzJ83Kug5p+TSnLG4Jx1Vzb9TW8paSn1hZacoV2sVhBvirDW6X6v0TbTyHLylpR1oHTwGdloxxBk3xezV0XpwyjIpFs0CZdsixcus=
-      eksademo@eksa-admin
-
----
-apiVersion: anywhere.eks.amazonaws.com/v1alpha1
-kind: VSphereMachineConfig
-metadata:
-  annotations:
     anywhere.eks.amazonaws.com/control-plane: "true"
   name: workload-cp
   namespace: default
@@ -108,6 +84,10 @@ spec:
   resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
   template: /SDDC-Datacenter/vm/Templates/bottlerocket-v1.26.4-kubernetes-1-26-eks-10-amd64-a195374
   users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDYJXh9lawd8x5jrwk0ZxiO7ACeasdhBMo5HxePl2JSiZsjvudWMiff9fDWdbyea7pfI1Ek+4uXzyjFM0joxqfVKU1JPVFztn8206e+D8KwlRS48OwrExm8+Vp0WJoXdMmKZJKaL77krNA8Bd41wFbAnkTp+ys/tRQ4cBsWXQwE5lvObiCv44P/X8ckzqfSxXFZt3hK/qJmtlzyUxAc2KTDd65gR7Gc07b48rbbFUmgoAcJnbhdackGvesL1SoGQ0DpgSmlJtbQi4cRQNXQm/g1vkPzmqDIuu8L9POyRSY3FpJKNmB0VdKUHF9T7dmjfti7a2EWgg+xM7OOsMC+uucfAUicZ0hM7CTG6fjirMjkE9+j7+m9oYVh0ofEaP40XDipvusUyNUCqVZ5VUzYLqz8gF68YmkmYP3oiSyWwFioZO+N+dnwAve+5zLtDDFceL8C3WXOYeFntRKYOxYzW0uFRtxrOgXbcwExb84ttQ8IQS+YVRd9E7gBE56YDHAIhzc=
+      eksapocenv@eksapocenv
   - name: ec2-user
     sshAuthorizedKeys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0DtKDP/zEo0PS9lURD8K/EXrblDji4lb/Dh6J6GEsLHs3eNTMp1NTA9+dPZIdUHv+UpFK9m3WdjWROgX81KDGsKktLwI1l9Q+01NsGFYSypsLE1T4YZWXMvWBqOIkRmG0dYCyr2DCQ7dexmJ0f7rXZt1EH9UgFelbevVxABXkixt1VAEN3IQGiPx8eXBFzjQRXQG5XoILUlLPNxmCzc1E5pNyAep50Onq5BNwqf0X1i9WPqeLy1ipOKUsO6SO35MAkaN1PoghCNy4JGtqbp1e1wMkUifEwmAP9RIrStJdGj2YaHElQNwhiLDxjpmEh2COkQ1RnERiWpwfJXu0sW038/7lxL6RNQVXf9ZJxF02pbJKGpaL2gvPDQeLkdGMkArDR2Zuc1TIHVx/PrkCpehIm5nawMIzJ83Kug5p+TSnLG4Jx1Vzb9TW8paSn1hZacoV2sVhBvirDW6X6v0TbTyHLylpR1oHTwGdloxxBk3xezV0XpwyjIpFs0CZdsixcus=
@@ -130,6 +110,38 @@ spec:
   resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
   template: /SDDC-Datacenter/vm/Templates/bottlerocket-v1.26.4-kubernetes-1-26-eks-10-amd64-a195374
   users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDYJXh9lawd8x5jrwk0ZxiO7ACeasdhBMo5HxePl2JSiZsjvudWMiff9fDWdbyea7pfI1Ek+4uXzyjFM0joxqfVKU1JPVFztn8206e+D8KwlRS48OwrExm8+Vp0WJoXdMmKZJKaL77krNA8Bd41wFbAnkTp+ys/tRQ4cBsWXQwE5lvObiCv44P/X8ckzqfSxXFZt3hK/qJmtlzyUxAc2KTDd65gR7Gc07b48rbbFUmgoAcJnbhdackGvesL1SoGQ0DpgSmlJtbQi4cRQNXQm/g1vkPzmqDIuu8L9POyRSY3FpJKNmB0VdKUHF9T7dmjfti7a2EWgg+xM7OOsMC+uucfAUicZ0hM7CTG6fjirMjkE9+j7+m9oYVh0ofEaP40XDipvusUyNUCqVZ5VUzYLqz8gF68YmkmYP3oiSyWwFioZO+N+dnwAve+5zLtDDFceL8C3WXOYeFntRKYOxYzW0uFRtxrOgXbcwExb84ttQ8IQS+YVRd9E7gBE56YDHAIhzc=
+      eksapocenv@eksapocenv
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0DtKDP/zEo0PS9lURD8K/EXrblDji4lb/Dh6J6GEsLHs3eNTMp1NTA9+dPZIdUHv+UpFK9m3WdjWROgX81KDGsKktLwI1l9Q+01NsGFYSypsLE1T4YZWXMvWBqOIkRmG0dYCyr2DCQ7dexmJ0f7rXZt1EH9UgFelbevVxABXkixt1VAEN3IQGiPx8eXBFzjQRXQG5XoILUlLPNxmCzc1E5pNyAep50Onq5BNwqf0X1i9WPqeLy1ipOKUsO6SO35MAkaN1PoghCNy4JGtqbp1e1wMkUifEwmAP9RIrStJdGj2YaHElQNwhiLDxjpmEh2COkQ1RnERiWpwfJXu0sW038/7lxL6RNQVXf9ZJxF02pbJKGpaL2gvPDQeLkdGMkArDR2Zuc1TIHVx/PrkCpehIm5nawMIzJ83Kug5p+TSnLG4Jx1Vzb9TW8paSn1hZacoV2sVhBvirDW6X6v0TbTyHLylpR1oHTwGdloxxBk3xezV0XpwyjIpFs0CZdsixcus=
+      eksademo@eksa-admin
+
+---
+apiVersion: anywhere.eks.amazonaws.com/v1alpha1
+kind: VSphereMachineConfig
+metadata:
+  annotations:
+    anywhere.eks.amazonaws.com/etcd: "true"
+  name: workload-etcd
+  namespace: default
+spec:
+  cloneMode: fullClone
+  datastore: /SDDC-Datacenter/datastore/WorkloadDatastore
+  diskGiB: 25
+  folder: /SDDC-Datacenter/vm/SDDC-Datacenter/vm/EKSAPOC-IND-TML
+  memoryMiB: 8192
+  numCPUs: 2
+  osFamily: bottlerocket
+  resourcePool: /SDDC-Datacenter/host/Cluster-1/Resources/Compute-ResourcePool/AMER-LATAM-ResourcePool
+  template: /SDDC-Datacenter/vm/Templates/bottlerocket-v1.26.4-kubernetes-1-26-eks-10-amd64-a195374
+  users:
+  - name: ec2-user
+    sshAuthorizedKeys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDYJXh9lawd8x5jrwk0ZxiO7ACeasdhBMo5HxePl2JSiZsjvudWMiff9fDWdbyea7pfI1Ek+4uXzyjFM0joxqfVKU1JPVFztn8206e+D8KwlRS48OwrExm8+Vp0WJoXdMmKZJKaL77krNA8Bd41wFbAnkTp+ys/tRQ4cBsWXQwE5lvObiCv44P/X8ckzqfSxXFZt3hK/qJmtlzyUxAc2KTDd65gR7Gc07b48rbbFUmgoAcJnbhdackGvesL1SoGQ0DpgSmlJtbQi4cRQNXQm/g1vkPzmqDIuu8L9POyRSY3FpJKNmB0VdKUHF9T7dmjfti7a2EWgg+xM7OOsMC+uucfAUicZ0hM7CTG6fjirMjkE9+j7+m9oYVh0ofEaP40XDipvusUyNUCqVZ5VUzYLqz8gF68YmkmYP3oiSyWwFioZO+N+dnwAve+5zLtDDFceL8C3WXOYeFntRKYOxYzW0uFRtxrOgXbcwExb84ttQ8IQS+YVRd9E7gBE56YDHAIhzc=
+      eksapocenv@eksapocenv
   - name: ec2-user
     sshAuthorizedKeys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0DtKDP/zEo0PS9lURD8K/EXrblDji4lb/Dh6J6GEsLHs3eNTMp1NTA9+dPZIdUHv+UpFK9m3WdjWROgX81KDGsKktLwI1l9Q+01NsGFYSypsLE1T4YZWXMvWBqOIkRmG0dYCyr2DCQ7dexmJ0f7rXZt1EH9UgFelbevVxABXkixt1VAEN3IQGiPx8eXBFzjQRXQG5XoILUlLPNxmCzc1E5pNyAep50Onq5BNwqf0X1i9WPqeLy1ipOKUsO6SO35MAkaN1PoghCNy4JGtqbp1e1wMkUifEwmAP9RIrStJdGj2YaHElQNwhiLDxjpmEh2COkQ1RnERiWpwfJXu0sW038/7lxL6RNQVXf9ZJxF02pbJKGpaL2gvPDQeLkdGMkArDR2Zuc1TIHVx/PrkCpehIm5nawMIzJ83Kug5p+TSnLG4Jx1Vzb9TW8paSn1hZacoV2sVhBvirDW6X6v0TbTyHLylpR1oHTwGdloxxBk3xezV0XpwyjIpFs0CZdsixcus=
